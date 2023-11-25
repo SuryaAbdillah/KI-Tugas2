@@ -1,0 +1,7 @@
+<!-- Template to edit user data -->
+<h1>Edit {{ user_data.user.username }}'s Data</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save changes</button>
+</form>

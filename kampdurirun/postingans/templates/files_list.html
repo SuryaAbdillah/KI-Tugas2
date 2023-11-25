@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Your HTML head content here -->
+</head>
+<body>
+    <ul>
+        {% for file in files %}
+            <li>
+                {{ file.title }} -
+                <a href="{% url 'download_view' file.id %}">Download</a>
+            </li>
+        {% empty %}
+            <li>No files available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

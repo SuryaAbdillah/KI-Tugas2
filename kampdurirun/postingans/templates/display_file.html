@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Decrypted File</title>
+</head>
+<body>
+    <h1>Decrypted File</h1>
+    <p>Title: {{ custom_file.title }}</p>
+    <p>Upload Date: {{ custom_file.upload_date }}</p>
+    
+    <!-- You can display or offer a download link for the decrypted file here -->
+    <a href="{{ custom_file.encrypted_file.url }}" download>Download Decrypted File</a>
+    
+    <a href="{% url 'upload_file' %}">Back to Upload Page</a>
+</body>
+</html>

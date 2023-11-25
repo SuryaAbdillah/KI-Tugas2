@@ -1,0 +1,7 @@
+<!-- Template to add user data -->
+<h1>Add Data for {{ user_data.user.username }}</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Data</button>
+</form>

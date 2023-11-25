@@ -1,0 +1,30 @@
+<!-- postingans_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postingans List</title>
+</head>
+<body>
+    <h1>Postingans List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Send Key</th>
+                <th>Actual Key</th> <!-- Add this column -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for postingans in postingans_list %}
+                <tr>
+                    <td>{{ postingans.title }}</td>
+                    <td><a href="{% url 'send_encryption_key_email' postingans.id %}">Send Key</a></td>
+                    <td>{{ postingans.encryption_key }}</td> <!-- Display the actual key -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

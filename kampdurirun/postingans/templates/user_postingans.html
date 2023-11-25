@@ -1,0 +1,29 @@
+<!-- user_postingans.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Postingans</title>
+</head>
+<body>
+    <h1>Your Postingans</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Key</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for postingans in user_postingans %}
+                <tr>
+                    <td>{{ postingans.title }}</td>
+                    <td>{{ postingans.encryption_key }}</td>
+                    <td><a href="{% url 'download_key' postingans.id %}">Download Key</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
