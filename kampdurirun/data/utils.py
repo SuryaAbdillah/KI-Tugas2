@@ -1,18 +1,31 @@
-from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 
-def encrypt_file(file_data, key):
-    cipher_suite = Fernet(key)
-    encrypted_data = cipher_suite.encrypt(file_data)
-    return encrypted_data
-
-def decrypt_file(encrypted_data, key):
-    cipher_suite = Fernet(key)
-    decrypted_data = cipher_suite.decrypt(encrypted_data)
-    return decrypted_data
-
+def generate_key_pair():
+    # Generate an RSA key pair
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=2048,
+        backend=default_backend()
+    )
+    
+    # Get the public key
+    public_key = private_key.public_key()
+    
+    # Serialize keys to PEM format
+    private_pem = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+    
+    public_pem = public_key.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+    
+    return private_pem, public_pem
 
 def encrypt(message, recipient_public_key):
     # Load the recipient's public key
@@ -20,7 +33,7 @@ def encrypt(message, recipient_public_key):
     
     # Encrypt the message
     ciphertext = recipient_key.encrypt(
-        message,
+        message.encode(),
         padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),

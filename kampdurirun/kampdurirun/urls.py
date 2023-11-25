@@ -16,9 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from user.views import index, registration, login_view, logout_view, home_view, user_profile_view
+from user.views import index, registration, login_view, logout_view, home_view
 from data.views import show_user_data, edit_user_data, add_user_data
-from postingans.views import upload_file, success_page, display_file, postingans_list, user_postingans, download_key, send_encryption_key_email, download_with_key
+from postingans.views import upload_file, success_page, postingans_list, user_postingans, download_key, send_encryption_key_email, download_with_key
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -37,7 +37,6 @@ urlpatterns = [
 
     path('upload/', upload_file, name='upload_file'),
     path('success/', success_page, name='success_page'),
-    path('display/<int:file_id>/', display_file, name='display_file'),
     path('list/', postingans_list, name='postingans_list'),
     path('user/', user_postingans, name='user_postingans'),
     path('download-key/<int:postingans_id>/', download_key, name='download_key'),
