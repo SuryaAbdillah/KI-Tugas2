@@ -8,4 +8,4 @@ class EncryptedFileForm(forms.ModelForm):
         fields = ['title', 'encrypted_file']
 
 class KeyForm(forms.Form):
-    input_key = forms.CharField(label='Enter Encryption Key', widget=forms.TextInput(attrs={'type': 'password'}))
+    input_key = forms.CharField()

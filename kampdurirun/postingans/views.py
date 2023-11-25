@@ -77,10 +77,12 @@ def send_encryption_key_email(request, postingans_id):
     # Encrypt the postingans encryption key with the user's public key
     encrypted_key = encrypt(postingans.encryption_key, recipient_public_key)
 
+    integer_value = int.from_bytes(encrypted_key, byteorder='big')
+
     # You should implement a secure way to send the encrypted key to the user via email.
     # For demonstration purposes, this example sends an email with the encrypted key.
     subject = 'Your Encrypted Encryption Key'
-    message = f'Please find your encrypted encryption key attached.\n\nKey: {encrypted_key}'
+    message = f'Please find your encrypted encryption key attached.\n\nKey: {integer_value}'
     from_email = 'suryaabdillah4@gmail.com'  # Update with your email
     to_email = [request.user.email]
 
@@ -96,14 +98,19 @@ def download_with_key(request, postingans_id):
     if request.method == 'POST':
         form = KeyForm(request.POST)
         if form.is_valid():
-            input_key = form.cleaned_data['input_key'].encode()
-            user_data = get_object_or_404(UserData, user=request.user)
-            input_key = b'\xcf\x92y\xe2<\xf3X\xa0\x8f\x16\x98\xeedx\x91A(\xb1\x05^,\xd2\x9d\xd2/S\xf8\xac\xc4h\x86g\xc9;/\x19\xf2\x10\xd86G\x1d\xcaV\xcf\xef\xb1\xe2\x9d\x9c\n~\xbe[k\x8a\xc0#upP\x03p\xeeQ\xfd\t\x87WH;\xa51\x83Vr)p~\xfajw\xde\x98Q\xd0\x93<\x10\r\xa9k`\xa3\x9e]\x9d\x1a\xd1nm\xab\x91\xf7\xc6\x11E\xdft\xfd\x1e\x84aOo\xcd\xfb\xb6\xf7\xe1f8\x85\x83\x15\r\x1a~\xd0\xad\xba\xdcS,\ni\xb4\xf8\xfb\xda\xa6ppU4&\x11,G\xf5\x866\xd5TS\x02\xa9\xb3\x10\x8d{\xbd \x05\x17\xa9\x90\x80v\xa6v\x02\xc6g\xac$\xd7x\xd8\xcb\x85\xd6\x94\xe6p\xdb\xe6$\x99\xb86\xf1wZ\x94\x16.`=0m\xbac\xef\xf1m\xc5\x07\xaapbvh`\xae\xb9(=@x\xef\xc7Z\xe6\x98\xc2Hc\xa8ws\t\x18\x08@\xcd\xe55\x1ak~G0\xf1c\xd2u\x1c\xb2C\xc9n`~a4'
+            input_key_str = form.cleaned_data['input_key']
 
-            # flag = temp == input_key
-            # # Decrypt the actual encryption key using the user's private key
+            try:
+                input_key = int(input_key_str)
+            except ValueError:
+                return HttpResponseForbidden('Invalid input key format. Please enter a valid integer.')
             
-            decrypted_actual_key = decrypt(input_key, user_data.private_key)
+            # Convert the integer input_key to binary
+            byte_sequence2 = input_key.to_bytes((input_key.bit_length() + 7) // 8, byteorder='big')
+            user_data = get_object_or_404(UserData, user=request.user)
+            
+            # Convert the binary key back to an integer before decryption
+            decrypted_actual_key = decrypt(byte_sequence2, user_data.private_key)
 
             # Convert the actual key to a string for comparison
             actual_key_str = actual_key.decode()
@@ -120,9 +127,6 @@ def download_with_key(request, postingans_id):
                 response.write(decrypted_content)
 
                 return response
-            
-                # # Redirect to download success page with the input value as a query parameter
-                # return render(request, 'download_success.html', {'input_key': input_key, 'user_private_key': user_data.private_key})
             else:
                 return HttpResponseForbidden('Incorrect decryption key.')
     else:
