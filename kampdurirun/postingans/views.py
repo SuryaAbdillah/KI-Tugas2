@@ -83,7 +83,7 @@ def send_encryption_key_email(request, postingans_id):
     # For demonstration purposes, this example sends an email with the encrypted key.
     subject = 'Your Encrypted Encryption Key'
     message = f'Please find your encrypted encryption key attached.\n\nKey: {integer_value}'
-    from_email = 'suryaabdillah4@gmail.com'  # Update with your email
+    from_email = 'EMAIL ANDA'  # Update with your email
     to_email = [request.user.email]
 
     send_mail(subject, message, from_email, to_email, fail_silently=False)
