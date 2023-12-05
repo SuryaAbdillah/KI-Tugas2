@@ -143,4 +143,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'suryaabdillah172@gmail.com'  # Replace with your Gmail email address
-EMAIL_HOST_PASSWORD = 'aifg geiy wcas nspx'  # Replace with your Gmail app password (generate one in your Google Account settings)
+EMAIL_HOST_PASSWORD = 'masukkan pass dari generate email'  # Replace with your Gmail app password (generate one in your Google Account settings)
