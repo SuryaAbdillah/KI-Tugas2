@@ -9,3 +9,8 @@ class EncryptedFileForm(forms.ModelForm):
 
 class KeyForm(forms.Form):
     input_key = forms.CharField()
+
+class PDFFileForm(forms.ModelForm):
+    class Meta:
+        model = Postingans
+        fields = ['title', 'encrypted_file']

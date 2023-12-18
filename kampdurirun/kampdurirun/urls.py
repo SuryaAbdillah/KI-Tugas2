@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from user.views import index, registration, login_view, logout_view, home_view
 from data.views import show_user_data, edit_user_data, add_user_data
-from postingans.views import upload_file, success_page, postingans_list, user_postingans, download_key, send_encryption_key_email, download_with_key
+from postingans.views import upload_file, success_page, postingans_list, user_postingans, download_key, send_encryption_key_email, download_with_key, upload_pdf_for_signing
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -42,4 +42,5 @@ urlpatterns = [
     path('download-key/<int:postingans_id>/', download_key, name='download_key'),
     path('send-key/<int:postingans_id>/', send_encryption_key_email, name='send_encryption_key_email'),
     path('download-with-key/<int:postingans_id>/', download_with_key, name='download_with_key'),
+    path('upload_pdf_for_signing/', upload_pdf_for_signing, name='upload_pdf_for_signing')
 ]

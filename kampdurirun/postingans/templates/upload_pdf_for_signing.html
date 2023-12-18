@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Sign PDF</title>
+</head>
+
+<body>
+    <h2>Upload and Sign PDF</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload and Sign PDF</button>
+    </form>
+
+    {% if success_message %}
+    <p>{{ success_message }}</p>
+    {% endif %}
+</body>
+
+</html>

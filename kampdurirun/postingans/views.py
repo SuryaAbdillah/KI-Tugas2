@@ -8,6 +8,14 @@ from postingans.models import Postingans
 from .utils import encrypt_file, decrypt_file, encrypt, decrypt
 from django.contrib.auth.decorators import login_required
 from data.models import UserData
+from django.shortcuts import render, redirect
+from .forms import PDFFileForm
+from .utils import verify_signature
+from django.shortcuts import render, redirect
+from .forms import PDFFileForm
+from .utils import verify_signature, sign_pdf
+from django.contrib import messages
+
 
 @login_required
 def upload_file(request):
@@ -83,7 +91,7 @@ def send_encryption_key_email(request, postingans_id):
     # For demonstration purposes, this example sends an email with the encrypted key.
     subject = 'Your Encrypted Encryption Key'
     message = f'Please find your encrypted encryption key attached.\n\nKey: {integer_value}'
-    from_email = 'EMAIL ANDA'  # Update with your email
+    from_email = 'maashal.rafif@gmail.com'  # Update with your email
     to_email = [request.user.email]
 
     send_mail(subject, message, from_email, to_email, fail_silently=False)
@@ -134,3 +142,25 @@ def download_with_key(request, postingans_id):
 
     # Render the download_with_key.html template with the form
     return render(request, 'download_with_key.html', {'form': form, 'actual_key': actual_key, 'key_inputted': False})
+
+@login_required
+def upload_pdf_for_signing(request):
+    if request.method == 'POST':
+        form = PDFFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            postingans = form.save(commit=False)
+            postingans.user = request.user
+            user_data = get_object_or_404(UserData, user=request.user)
+
+            # Sign the PDF and store the digital signature
+            signature = sign_pdf(postingans.encrypted_file.read(), user_data.private_key)
+            postingans.digital_signature = signature
+
+            postingans.save()
+
+            messages.success(request, 'PDF successfully uploaded and signed!')
+            return redirect('success_page')
+    else:
+        form = PDFFileForm()
+
+    return render(request, 'upload_pdf_for_signing.html', {'form': form})
